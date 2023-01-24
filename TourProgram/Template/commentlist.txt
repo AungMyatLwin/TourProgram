@@ -1,0 +1,83 @@
+<?php
+
+if (isset($_GET['delete'])) {
+    if ($_GET['delete'] == 'fail') {
+        echo "<p>Delete Failed</p>";
+    }
+}
+include 'config/config.php';
+$con = $GLOBALS['con'];
+$total = $con->query("select * from teacher");
+$total = $total->num_rows;
+
+$limit = 5;
+$start = 0;
+if (isset($_GET['start'])) {
+    $start = $_GET['start'];
+}
+$next = $start + $limit;
+$prev = $start - $limit;
+?>
+<html>
+    <head>
+        <title>Comment List</title>
+    </head>
+    <body>
+        <a herf="Logout.php"> Log Out</a>
+        <table border ="1px" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>comment</th>
+           
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT * FROM teacher order by id limit $start,$limit";
+                $result = $con->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $id = $row['id'];
+                        $name = $row['name'];
+                        $email = $email['email'];
+                        $department = $row['comment'];
+                       
+                        ?>
+                        <tr>
+                            <td><?php echo $id; ?></td>
+                            <td><?php echo $name; ?></td>
+                            <td><?php echo $email; ?></td> 
+                            <td><?php echo $comment; ?></td>
+                        </tr>
+                        <?php
+                    }
+                } else{
+                    echo "0 result";
+                }
+                $conn->close();
+                ?>
+
+
+
+            </tbody>
+        </table>
+        <div class="paging">
+            <?php if ($prev < 0) { ?>
+                <span>&laquo; Previous </span>
+            <?php } else { ?>
+                <a herf ="?start =<?php echo $prev; ?>">&laquo; Previous</a>
+            <?php } ?>
+
+            <?php if ($next >= $total) { ?>
+                <span> Next &raquo;</span>
+            <?php } else { ?>
+                <a herf="?start=<?php echo $next; ?>">Next &raquo;</a>
+                <?php }
+            ?>
+        </div>
+    </body>
+</html>                    
